@@ -15,6 +15,10 @@ Not all metadata is easily accessed online via an HTML web page. There are some 
 * perform poorly, crash and timeout
 * frequently change their HTML structure
 
+This agent doesn't collect any metadata itself — it simply loads metadata from JSON files found with your media into Plex.
+
+It's designed to work alongside other tools and methods of collecting metadata, be it a custom scraper (it doesn't even have to be written in Python), browser plugin, command line tool or GUI. You could even edit the files by hand :)
+
 
 Media Preperation
 -----------------
