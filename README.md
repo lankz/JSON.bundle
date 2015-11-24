@@ -32,6 +32,7 @@ Movies
   |- Akira (1988)
       |- akira.1988.720p.bluray.x264.mp4
       |- Info.json
+      |- Poster.jpg
 ```
 
 This means you are limited to a single movie and `Info.json` file per directory.
