@@ -78,3 +78,27 @@ class JSONAgent(Agent.Movies):
                 metadata.collections.add(c)
         except:
             pass
+        
+         metadata.producers.clear()
+        
+        try:
+            for r in info['producers']:
+                producer = metadata.producers.new()
+
+                try: producer.name = r['name']
+                except: pass
+                
+        except:
+            pass
+                       
+        metadata.writers.clear()
+        
+        try:
+            for r in info['writers']:
+                writer = metadata.writers.new()
+
+                try: writer.name = r['name']
+                except: pass
+                
+        except:
+            pass
