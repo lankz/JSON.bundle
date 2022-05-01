@@ -78,3 +78,15 @@ class JSONAgent(Agent.Movies):
                 metadata.collections.add(c)
         except:
             pass
+        
+        
+        metadata.countries.clear()
+
+        try:
+            for d in info['countries']:
+                metadata.countries.add(d)
+        except:
+            pass  
+            
+        try: metadata.original_title = info['original_title']
+        except: pass
