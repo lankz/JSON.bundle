@@ -78,3 +78,7 @@ class JSONAgent(Agent.Movies):
                 metadata.collections.add(c)
         except:
             pass
+
+        try: metadata.tagline = info['tagline']
+        except: pass
+        
