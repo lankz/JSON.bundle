@@ -42,10 +42,14 @@ class JSONAgent(Agent.Movies):
         except: pass
 
         metadata.directors.clear()
-
+        
         try:
-            for d in info['directors']:
-                metadata.directors.add(d)
+            for r in info['directors']:
+                director = metadata.directors.new()
+
+                try: director.name = r['name']
+                except: pass
+                
         except:
             pass
 
