@@ -4,6 +4,13 @@ class Jinf:
     def __init__(self, data):
         self.data = data
 
+        # must have at least these two values to be considered valid info
+        if not self.title():
+            raise Exception('Missing title')
+
+        if not self.year():
+            raise Exception('Missing year')
+
     @classmethod
     def load_file(cls, path):
         if not os.path.exists(path):
