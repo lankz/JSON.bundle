@@ -26,18 +26,7 @@ class JSONAgent(Agent.Movies):
         part = media.items[0].parts[0]
         path = os.path.join(os.path.dirname(part.file), 'Info.json')
 
-        if not os.path.exists(path):
-            raise Exception('No file exists at path: %s' % path)
-
-        try:
-            data = json.loads(Core.storage.load(path))
-        except json.decoder.JSONDecodeError as json_error:
-            raise Exception('Invalid JSON: %s' % json_error)
-
-        if not isinstance(data, dict):
-            raise Exception('Invalid JSON: must be a dictionary')
-
-        return Jinf(data)
+        return Jinf.load_file(path)
 
     def search(self, results, media, lang):
         try: info = self.load_info(media)

@@ -2,6 +2,21 @@ class Jinf:
     def __init__(self, data):
         self.data = data
 
+    @classmethod
+    def load_file(cls, path):
+        if not os.path.exists(path):
+            raise Exception('No file exists at path: %s' % path)
+
+        try:
+            data = json.loads(Core.storage.load(path))
+        except json.decoder.JSONDecodeError as json_error:
+            raise Exception('Invalid JSON: %s' % json_error)
+
+        if not isinstance(data, dict):
+            raise Exception('Invalid JSON: must be a dictionary')
+
+        return cls(data)
+
     def title(self):
         return str(self.data.get('title')).strip()
 
