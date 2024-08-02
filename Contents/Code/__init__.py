@@ -5,7 +5,9 @@ class JSONAgent(Agent.Movies):
 
     primary_provider = True
 
-    languages = [Locale.Language.NoLanguage]
+    languages = [
+        Locale.Language.NoLanguage
+    ]
 
     accepts_from = [
         'com.plexapp.agents.localmedia'
