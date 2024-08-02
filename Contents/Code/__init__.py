@@ -20,11 +20,14 @@ class JSONAgent(Agent.Movies):
         'com.plexapp.agents.none'
     ]
 
-    def search(self, results, media, lang):
+    def info_exists(self, media):
         part = media.items[0].parts[0]
         path = os.path.join(os.path.dirname(part.file), 'Info.json')
 
-        if os.path.exists(path):
+        return os.path.exists(path)
+
+    def search(self, results, media, lang):
+        if self.info_exists(media):
             results.Append(MetadataSearchResult(id = 'null', score = 100))
 
     def update(self, metadata, media, lang):
