@@ -45,7 +45,7 @@ The structure of the `Info.json` file follows as closely as possible that of the
 
 ```json
 {
-	"title": "Akira",
+    "title": "Akira",
     "summary": "Childhood friends Tetsuo and Kaneda are pulled into the...",
     "year": 1988,
     "rating": 7.7,
@@ -53,11 +53,11 @@ The structure of the `Info.json` file follows as closely as possible that of the
     "studio": "Bandai Visual Company",
     "duration": 124,
     "directors": [
-      "Katsuhiro Ōtomo"
+        "Katsuhiro Ōtomo"
     ],
     "roles": [
     	{
-        	"actor": "Mitsuo Iwata",
+            "actor": "Mitsuo Iwata",
             "role": "Shôtarô Kaneda"
         },
     ],
