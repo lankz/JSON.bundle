@@ -44,23 +44,24 @@ class JSONAgent(Agent.Movies):
     def update(self, metadata, media, lang):
         info = self.load_info(media)
 
-        try: metadata.title = info['title']
-        except: pass
+        # we should always have these
+        metadata.title = info.title()
+        metadata.year = info.year()
 
-        try: metadata.summary = info['summary']
-        except: pass
+        if info.summary():
+            metadata.summary = info.summary()
 
-        try: metadata.year = info['year']
-        except: pass
+        if info.release_date():
+            metadata.originally_available_at = info.release_date()
 
         try: metadata.rating = info['rating']
         except: pass
 
-        try: metadata.content_rating = info['content_rating']
-        except: pass
+        if info.content_rating():
+            metadata.content_rating = info.content_rating()
 
-        try: metadata.studio = info['studio']
-        except: pass
+        if info.studio():
+            metadata.studio = info.studio()
 
         try: metadata.duration = info['duration']
         except: pass
