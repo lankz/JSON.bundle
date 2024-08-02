@@ -1,3 +1,5 @@
+import os, json, re
+
 class Jinf:
     def __init__(self, data):
         self.data = data
@@ -32,6 +34,24 @@ class Jinf:
         if value and isinstance(value, int):
             return value
 
+    def get_float(self, key):
+        value = self.data.get(key)
+
+        if value:
+          if isinstance(value, float):
+            return value
+
+          if isinstance(value, int):
+            return float(value)
+
+          if isinstance(value, (str, unicode)):
+            value = str(value)
+
+            # support floats represented as strings in the json to avoid any
+            # weirdness with floating point precision
+            if re.match(r'^\d+(\.\d+)?$', value):
+              return float(value)
+
     def get_date(self, key):
         try:
             value = self.data.get(key)
@@ -43,6 +63,9 @@ class Jinf:
 
     def title(self):
         return self.get_str('title')
+
+    def original_title(self):
+        return self.get_str('original_title')
 
     def summary(self):
         return self.get_str('summary') or self.get_str('description')
@@ -61,8 +84,14 @@ class Jinf:
         if self.release_date():
             return self.release_date().year
 
+    def rating(self):
+        return self.get_float('rating') or self.get_decimal('rating')
+
     def content_rating(self):
         return self.get_str('content_rating')
 
     def studio(self):
         return self.get_str('studio')
+
+    def duration(self):
+        return self.get_int('duration')

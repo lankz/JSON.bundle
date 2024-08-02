@@ -48,23 +48,33 @@ class JSONAgent(Agent.Movies):
         metadata.title = info.title()
         metadata.year = info.year()
 
-        if info.summary():
-            metadata.summary = info.summary()
+        original_title = info.original_title()
+        if original_title:
+            metadata.original_title = original_title
 
-        if info.release_date():
-            metadata.originally_available_at = info.release_date()
+        summary = info.summary()
+        if summary:
+            metadata.summary = summary
 
-        try: metadata.rating = info['rating']
-        except: pass
+        release_date = info.release_date()
+        if release_date:
+            metadata.originally_available_at = release_date
 
-        if info.content_rating():
-            metadata.content_rating = info.content_rating()
+        rating = info.rating()
+        if rating:
+            metadata.rating = rating
 
-        if info.studio():
-            metadata.studio = info.studio()
+        content_rating = info.content_rating()
+        if content_rating:
+            metadata.content_rating = content_rating
 
-        try: metadata.duration = info['duration']
-        except: pass
+        studio = info.studio()
+        if studio:
+            metadata.studio = studio
+
+        duration = info.duration()
+        if duration:
+            metadata.duration = duration
 
         metadata.directors.clear()
 
@@ -116,6 +126,3 @@ class JSONAgent(Agent.Movies):
                 metadata.countries.add(d)
         except:
             pass
-
-        try: metadata.original_title = info['original_title']
-        except: pass
