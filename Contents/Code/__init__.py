@@ -3,6 +3,35 @@ import os, json
 def Start():
   pass
 
+class Jinf:
+    def __init__(self, data):
+        self.data = data
+
+    def title(self):
+        return str(self.data.get('title')).strip()
+
+    def release_date(self):
+        try:
+            release_date = self.data.get('release_date')
+
+            if release_date:
+                return Datetime.ParseDate(release_date).date()
+        except:
+            pass
+
+    def year(self):
+        try:
+            year = int(self.data.get('year'))
+            if year > 1900 and year < 2100:
+                return year
+        except:
+            pass
+
+        # if we didn't get a year from info.json, try extracting it
+        # from the release date
+        if self.release_date():
+            return self.release_date().year
+
 class JSONAgent(Agent.Movies):
     name = 'JSON Metadata'
 
@@ -35,13 +64,19 @@ class JSONAgent(Agent.Movies):
         if not isinstance(data, dict):
             raise Exception('Invalid JSON: must be a dictionary')
 
-        return data
+        return Jinf(data)
 
     def search(self, results, media, lang):
         try: info = self.load_info(media)
         except: return
 
-        results.Append(MetadataSearchResult(id = 'null', score = 100))
+        results.Append(MetadataSearchResult(
+            id =  media.id,
+            name = info.title(),
+            year = info.year(),
+            lang = lang,
+            score = 100
+        ))
 
     def update(self, metadata, media, lang):
         info = self.load_info(media)
