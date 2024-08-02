@@ -20,21 +20,31 @@ class JSONAgent(Agent.Movies):
         'com.plexapp.agents.none'
     ]
 
-    def info_exists(self, media):
+    def load_info(self, media):
         part = media.items[0].parts[0]
         path = os.path.join(os.path.dirname(part.file), 'Info.json')
 
-        return os.path.exists(path)
+        if not os.path.exists(path):
+            raise Exception('No file exists at path: %s' % path)
+
+        try:
+            data = json.loads(Core.storage.load(path))
+        except json.decoder.JSONDecodeError as json_error:
+            raise Exception('Invalid JSON: %s' % json_error)
+
+        if not isinstance(data, dict):
+            raise Exception('Invalid JSON: must be a dictionary')
+
+        return data
 
     def search(self, results, media, lang):
-        if self.info_exists(media):
-            results.Append(MetadataSearchResult(id = 'null', score = 100))
+        try: info = self.load_info(media)
+        except: return
+
+        results.Append(MetadataSearchResult(id = 'null', score = 100))
 
     def update(self, metadata, media, lang):
-        part = media.items[0].parts[0]
-        path = os.path.join(os.path.dirname(part.file), 'Info.json')
-
-        info = json.loads(Core.storage.load(path))
+        info = self.load_info(media)
 
         try: metadata.title = info['title']
         except: pass
