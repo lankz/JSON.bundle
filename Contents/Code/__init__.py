@@ -2,10 +2,20 @@ import os, json
 
 class JSONAgent(Agent.Movies):
     name = 'JSON Metadata'
-    languages = [Locale.Language.NoLanguage]
+
     primary_provider = False
+
+    languages = [Locale.Language.NoLanguage]
+
     persist_stored_files = False
-    contributes_to = ['com.plexapp.agents.none']
+
+    accepts_from = [
+        'com.plexapp.agents.localmedia'
+    ]
+
+    contributes_to = [
+        'com.plexapp.agents.none'
+    ]
 
     def search(self, results, media, lang):
         part = media.items[0].parts[0]
@@ -42,14 +52,14 @@ class JSONAgent(Agent.Movies):
         except: pass
 
         metadata.directors.clear()
-        
+
         try:
             for r in info['directors']:
                 director = metadata.directors.new()
 
                 try: director.name = r['name']
                 except: pass
-                
+
         except:
             pass
 
@@ -82,15 +92,15 @@ class JSONAgent(Agent.Movies):
                 metadata.collections.add(c)
         except:
             pass
-        
-        
+
+
         metadata.countries.clear()
 
         try:
             for d in info['countries']:
                 metadata.countries.add(d)
         except:
-            pass  
-            
+            pass
+
         try: metadata.original_title = info['original_title']
         except: pass
