@@ -3,7 +3,7 @@ import os, json
 class JSONAgent(Agent.Movies):
     name = 'JSON Metadata'
 
-    primary_provider = False
+    primary_provider = True
 
     languages = [Locale.Language.NoLanguage]
 
