@@ -1,5 +1,8 @@
 import os, json
 
+def Start():
+  pass
+
 class JSONAgent(Agent.Movies):
     name = 'JSON Metadata'
 
