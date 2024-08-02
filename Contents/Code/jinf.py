@@ -19,6 +19,41 @@ class Jinf:
 
         return cls(data)
 
+    def title(self):
+        return self.get_str('title')
+
+    def original_title(self):
+        return self.get_str('original_title')
+
+    def summary(self):
+        return self.get_str('summary') or self.get_str('description')
+
+    def release_date(self):
+        return self.get_date('release_date')
+
+    def year(self):
+        year = self.get_int('year')
+
+        if year and year > 1900 and year < 2100:
+            return year
+
+        # if there's no explicit year key, we try extracting it
+        # from the release date
+        if self.release_date():
+            return self.release_date().year
+
+    def rating(self):
+        return self.get_float('rating') or self.get_decimal('rating')
+
+    def content_rating(self):
+        return self.get_str('content_rating')
+
+    def studio(self):
+        return self.get_str('studio')
+
+    def duration(self):
+        return self.get_int('duration')
+
     def get_str(self, key):
         value = self.data.get(key)
 
@@ -60,38 +95,3 @@ class Jinf:
                 return Datetime.ParseDate(value).date()
         except:
             pass
-
-    def title(self):
-        return self.get_str('title')
-
-    def original_title(self):
-        return self.get_str('original_title')
-
-    def summary(self):
-        return self.get_str('summary') or self.get_str('description')
-
-    def release_date(self):
-        return self.get_date('release_date')
-
-    def year(self):
-        year = self.get_int('year')
-
-        if year and year > 1900 and year < 2100:
-            return year
-
-        # if there's no explicit year key, we try extracting it
-        # from the release date
-        if self.release_date():
-            return self.release_date().year
-
-    def rating(self):
-        return self.get_float('rating') or self.get_decimal('rating')
-
-    def content_rating(self):
-        return self.get_str('content_rating')
-
-    def studio(self):
-        return self.get_str('studio')
-
-    def duration(self):
-        return self.get_int('duration')
