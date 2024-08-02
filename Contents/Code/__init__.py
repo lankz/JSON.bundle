@@ -7,8 +7,6 @@ class JSONAgent(Agent.Movies):
 
     languages = [Locale.Language.NoLanguage]
 
-    persist_stored_files = False
-
     accepts_from = [
         'com.plexapp.agents.localmedia'
     ]
