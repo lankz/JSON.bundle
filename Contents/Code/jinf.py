@@ -32,6 +32,9 @@ class Jinf:
     def original_title(self):
         return self.get_str('original_title')
 
+    def tagline(self):
+        return self.get_str('tagline')
+
     def summary(self):
         return self.get_str('summary') or self.get_str('description')
 

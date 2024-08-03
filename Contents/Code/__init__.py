@@ -52,6 +52,10 @@ class JSONAgent(Agent.Movies):
         if original_title:
             metadata.original_title = original_title
 
+        tagline = info.tagline()
+        if tagline:
+            metadata.tagline = tagline
+
         summary = info.summary()
         if summary:
             metadata.summary = summary
