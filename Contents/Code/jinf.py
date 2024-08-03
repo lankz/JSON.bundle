@@ -1,4 +1,4 @@
-import os, json, re
+import os, json, re, urlparse
 
 class Jinf:
     def __init__(self, data):
@@ -88,11 +88,18 @@ class Jinf:
                 actor['name'].strip()
             )
 
+        def is_valid_url(url):
+            parsed = urlparse.urlparse(url)
+            return parsed.scheme in ['http', 'https'] and bool(parsed.netloc)
+
         def extract_actor_info(actor):
             actor_info = {'name': actor['name'].strip()}
 
             if 'role' in actor and isinstance(actor['role'], (str, unicode)) and actor['role'].strip():
                 actor_info['role'] = actor['role'].strip()
+
+            if 'thumb' in actor and isinstance(actor['thumb'], (str, unicode)) and is_valid_url(actor['thumb']):
+                actor_info['thumb'] = actor['thumb'].strip()
 
             return actor_info
 

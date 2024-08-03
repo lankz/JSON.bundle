@@ -93,6 +93,9 @@ class JSONAgent(Agent.Movies):
             if a.get('role'):
                 role.role = a.get('role')
 
+            if a.get('thumb'):
+                role.photo = a.get('thumb')
+
         metadata.collections.clear()
         for c in info.collections():
             metadata.collections.add(c)
