@@ -42,7 +42,8 @@ class JSONAgent(Agent.Movies):
         ))
 
     def update(self, metadata, media, lang):
-        info = self.load_info(media)
+        try: info = self.load_info(media)
+        except: return
 
         # we should always have these
         metadata.title = info.title()
