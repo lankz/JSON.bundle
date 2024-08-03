@@ -61,6 +61,27 @@ class Jinf:
     def duration(self):
         return self.get_int('duration')
 
+    def genres(self):
+        return filter(None, [
+            str(value).strip()
+            for value in self.get_array('genres')
+            if isinstance(value, (str, unicode))
+        ])
+
+    def collections(self):
+        return filter(None, [
+            str(value).strip()
+            for value in self.get_array('collections')
+            if isinstance(value, (str, unicode))
+        ])
+
+    def countries(self):
+        return filter(None, [
+            str(value).strip()
+            for value in self.get_array('countries')
+            if isinstance(value, (str, unicode))
+        ])
+
     def get_str(self, key):
         value = self.data.get(key)
 
@@ -102,3 +123,11 @@ class Jinf:
                 return Datetime.ParseDate(value).date()
         except:
             pass
+
+    def get_array(self, key):
+        value = self.data.get(key)
+
+        if isinstance(value, list):
+            return value
+
+        return []

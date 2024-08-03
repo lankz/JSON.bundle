@@ -89,12 +89,8 @@ class JSONAgent(Agent.Movies):
             pass
 
         metadata.genres.clear()
-
-        try:
-            for g in info['genres']:
-                metadata.genres.add(g)
-        except:
-            pass
+        for genre in info.genres():
+            metadata.genres.add(genre)
 
         metadata.roles.clear()
 
@@ -111,18 +107,9 @@ class JSONAgent(Agent.Movies):
             pass
 
         metadata.collections.clear()
-
-        try:
-            for c in info['collections']:
-                metadata.collections.add(c)
-        except:
-            pass
-
+        for collection in info.collections():
+            metadata.collections.add(collection)
 
         metadata.countries.clear()
-
-        try:
-            for d in info['countries']:
-                metadata.countries.add(d)
-        except:
-            pass
+        for country in info.countries():
+            metadata.countries.add(country)
