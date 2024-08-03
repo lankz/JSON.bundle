@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Movie",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "original_title": {
+      "type": "string"
+    },
+    "tagline": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "year": {
+      "type": "integer"
+    },
+    "release_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "rating": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        {
+          "type": "string",
+          "pattern": "^(10|[0-9](\\.[0-9])?)$"
+        }
+      ]
+    },
+    "content_rating": {
+      "type": "string"
+    },
+    "studio": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "directors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "actors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "thumb": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "genres": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "collections": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "countries": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["title"],
+  "anyOf": [
+    { "required": ["year"] },
+    { "required": ["release_date"] }
+  ]
+}
