@@ -61,6 +61,17 @@ class Jinf:
     def duration(self):
         return self.get_int('duration')
 
+    def directors(self):
+        return [
+            {'name': str(director['name']).strip()}
+            for director in self.get_array('directors')
+            if (isinstance(director, dict)
+                and 'name' in director
+                and isinstance(director['name'], (str, unicode))
+                and str(director['name']).strip()
+            )
+        ]
+
     def genres(self):
         return filter(None, [
             str(value).strip()

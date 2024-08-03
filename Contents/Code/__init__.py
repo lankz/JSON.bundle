@@ -77,20 +77,13 @@ class JSONAgent(Agent.Movies):
             metadata.duration = duration
 
         metadata.directors.clear()
-
-        try:
-            for r in info['directors']:
-                director = metadata.directors.new()
-
-                try: director.name = r['name']
-                except: pass
-
-        except:
-            pass
+        for d in info.directors():
+            director = metadata.directors.new()
+            director.name = d.get('name')
 
         metadata.genres.clear()
-        for genre in info.genres():
-            metadata.genres.add(genre)
+        for g in info.genres():
+            metadata.genres.add(g)
 
         metadata.roles.clear()
 
@@ -107,9 +100,9 @@ class JSONAgent(Agent.Movies):
             pass
 
         metadata.collections.clear()
-        for collection in info.collections():
-            metadata.collections.add(collection)
+        for c in info.collections():
+            metadata.collections.add(c)
 
         metadata.countries.clear()
-        for country in info.countries():
-            metadata.countries.add(country)
+        for c in info.countries():
+            metadata.countries.add(c)
