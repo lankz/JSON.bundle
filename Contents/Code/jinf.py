@@ -72,6 +72,25 @@ class Jinf:
             )
         ]
 
+    def actors(self):
+        actors = []
+
+        for a in self.get_array('actors'):
+            if not isinstance(a, dict):
+                continue
+
+            if not 'name' in a or not isinstance(a['name'], (str, unicode)) or not str(a['name']).strip():
+                continue
+
+            actor = {'name': str(a['name']).strip()}
+
+            if 'role' in a and isinstance(a['role'], (str, unicode)) and str(a['role']).strip():
+                actor['role'] = str(a['role']).strip()
+
+            actors.append(actor)
+
+        return actors
+
     def genres(self):
         return filter(None, [
             str(value).strip()

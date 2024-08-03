@@ -53,11 +53,13 @@ The structure of the `Info.json` file follows as closely as possible that of the
     "studio": "Bandai Visual Company",
     "duration": 124,
     "directors": [
-        "Katsuhiro Ōtomo"
+        {
+            "name": "Katsuhiro Ōtomo"
+        }
     ],
-    "roles": [
+    "actors": [
     	{
-            "actor": "Mitsuo Iwata",
+            "name": "Mitsuo Iwata",
             "role": "Shôtarô Kaneda"
         },
     ],

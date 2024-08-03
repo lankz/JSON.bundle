@@ -86,18 +86,12 @@ class JSONAgent(Agent.Movies):
             metadata.genres.add(g)
 
         metadata.roles.clear()
+        for a in info.actors():
+            role = metadata.roles.new()
+            role.name = a.get('name')
 
-        try:
-            for r in info['roles']:
-                role = metadata.roles.new()
-
-                try: role.actor = r['actor']
-                except: pass
-
-                try: role.role = r['role']
-                except: pass
-        except:
-            pass
+            if a.get('role'):
+                role.role = a.get('role')
 
         metadata.collections.clear()
         for c in info.collections():
