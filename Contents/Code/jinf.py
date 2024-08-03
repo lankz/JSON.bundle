@@ -62,34 +62,45 @@ class Jinf:
         return self.get_int('duration')
 
     def directors(self):
-        return [
-            {'name': str(director['name']).strip()}
-            for director in self.get_array('directors')
-            if (isinstance(director, dict)
-                and 'name' in director
-                and isinstance(director['name'], (str, unicode))
-                and str(director['name']).strip()
+        def is_valid_director(director):
+            return (
+                isinstance(director, dict) and
+                'name' in director and
+                isinstance(director['name'], (str, unicode)) and
+                director['name'].strip()
             )
+
+        def extract_director_info(director):
+            return {'name': director['name'].strip()}
+
+        return [
+            extract_director_info(director)
+            for director in self.get_array('directors')
+            if is_valid_director(director)
         ]
 
     def actors(self):
-        actors = []
+        def is_valid_actor(actor):
+            return (
+                isinstance(actor, dict) and
+                'name' in actor and
+                isinstance(actor['name'], (str, unicode)) and
+                actor['name'].strip()
+            )
 
-        for a in self.get_array('actors'):
-            if not isinstance(a, dict):
-                continue
+        def extract_actor_info(actor):
+            actor_info = {'name': actor['name'].strip()}
 
-            if not 'name' in a or not isinstance(a['name'], (str, unicode)) or not str(a['name']).strip():
-                continue
+            if 'role' in actor and isinstance(actor['role'], (str, unicode)) and actor['role'].strip():
+                actor_info['role'] = actor['role'].strip()
 
-            actor = {'name': str(a['name']).strip()}
+            return actor_info
 
-            if 'role' in a and isinstance(a['role'], (str, unicode)) and str(a['role']).strip():
-                actor['role'] = str(a['role']).strip()
-
-            actors.append(actor)
-
-        return actors
+        return [
+            extract_actor_info(actor)
+            for actor in self.get_array('actors')
+            if is_valid_actor(actor)
+        ]
 
     def genres(self):
         return filter(None, [
