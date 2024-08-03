@@ -18,7 +18,7 @@ class Jinf:
 
         try:
             data = json.loads(Core.storage.load(path))
-        except json.decoder.JSONDecodeError as json_error:
+        except json.JSONDecodeError as json_error:
             raise Exception('Invalid JSON: %s' % json_error)
 
         if not isinstance(data, dict):
@@ -65,13 +65,12 @@ class Jinf:
         def is_valid_director(director):
             return (
                 isinstance(director, dict) and
-                'name' in director and
-                isinstance(director['name'], (str, unicode)) and
-                director['name'].strip()
+                isinstance(director.get('name'), (str, unicode)) and
+                str(director.get('name')).strip()
             )
 
         def extract_director_info(director):
-            return {'name': director['name'].strip()}
+            return {'name': str(director.get('name')).strip()}
 
         return [
             extract_director_info(director)
@@ -83,9 +82,8 @@ class Jinf:
         def is_valid_actor(actor):
             return (
                 isinstance(actor, dict) and
-                'name' in actor and
-                isinstance(actor['name'], (str, unicode)) and
-                actor['name'].strip()
+                isinstance(actor.get('name'), (str, unicode)) and
+                str(actor.get('name')).strip()
             )
 
         def is_valid_url(url):
@@ -93,13 +91,15 @@ class Jinf:
             return parsed.scheme in ['http', 'https'] and bool(parsed.netloc)
 
         def extract_actor_info(actor):
-            actor_info = {'name': actor['name'].strip()}
+            actor_info = {'name': str(actor.get('name')).strip()}
 
-            if 'role' in actor and isinstance(actor['role'], (str, unicode)) and actor['role'].strip():
-                actor_info['role'] = actor['role'].strip()
+            role = actor.get('role')
+            if isinstance(role, (str, unicode)) and str(role).strip():
+                actor_info['role'] = str(role).strip()
 
-            if 'thumb' in actor and isinstance(actor['thumb'], (str, unicode)) and is_valid_url(actor['thumb']):
-                actor_info['thumb'] = actor['thumb'].strip()
+            thumb = actor.get('thumb')
+            if isinstance(thumb, (str, unicode)) and is_valid_url(str(thumb)):
+                actor_info['thumb'] = str(thumb).strip()
 
             return actor_info
 
