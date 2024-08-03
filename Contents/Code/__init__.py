@@ -31,7 +31,9 @@ class JSONAgent(Agent.Movies):
 
     def search(self, results, media, lang):
         try: info = self.load_info(media)
-        except: return
+        except Exception as e:
+            Log('Error loading info: %s' % e)
+            return
 
         results.Append(MetadataSearchResult(
             id =  media.id,
@@ -43,7 +45,9 @@ class JSONAgent(Agent.Movies):
 
     def update(self, metadata, media, lang):
         try: info = self.load_info(media)
-        except: return
+        except Exception as e:
+            Log('Error loading info: %s' % e)
+            return
 
         # we should always have these
         metadata.title = info.title()
