@@ -1,7 +1,6 @@
 import unittest
 import os
 import sys
-import tempfile
 import types
 import importlib
 import builtins
@@ -22,6 +21,7 @@ class DummyDatetime:
     def ParseDate(value):
         return datetime.strptime(value, "%Y-%m-%d")
 
+
 def load_jinf():
     builtins.unicode = str
     import urllib.parse
@@ -31,11 +31,15 @@ def load_jinf():
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'Contents', 'Code'))
     return importlib.import_module('jinf')
 
-class LoadFileTest(unittest.TestCase):
+
+class JinfTestCase(unittest.TestCase):
     def setUp(self):
         self.jinf = load_jinf()
         self.jinf.Core = DummyCore()
         self.jinf.Datetime = DummyDatetime
+        self.fixture_path = os.path.join(
+            os.path.dirname(__file__), 'fixtures', 'all_fields.json'
+        )
 
     def tearDown(self):
         sys.modules.pop('urlparse', None)
@@ -45,125 +49,120 @@ class LoadFileTest(unittest.TestCase):
         if hasattr(self.jinf, 'Datetime'):
             delattr(self.jinf, 'Datetime')
 
+    # helper to load fixture fresh for each test
+    def load_fixture(self):
+        return self.jinf.Jinf.load_file(self.fixture_path)
+
     def test_invalid_json(self):
-        with tempfile.NamedTemporaryFile('w', delete=False) as tmp:
-            tmp.write('{ invalid ')
-            tmp_path = tmp.name
+        original_load = self.jinf.Core.storage.load
+        self.jinf.Core.storage.load = lambda _: '{ invalid '
         try:
             with self.assertRaises(Exception) as ctx:
-                self.jinf.Jinf.load_file(tmp_path)
+                self.jinf.Jinf.load_file(self.fixture_path)
             self.assertIn('Invalid JSON', str(ctx.exception))
         finally:
-            os.unlink(tmp_path)
+            self.jinf.Core.storage.load = original_load
+
+    def test_title(self):
+        info = self.load_fixture()
+        self.assertEqual(info.title(), 'Test Movie')
+
+    def test_original_title(self):
+        info = self.load_fixture()
+        self.assertEqual(info.original_title(), 'Original Title')
+
+    def test_tagline(self):
+        info = self.load_fixture()
+        self.assertEqual(info.tagline(), 'Just a test')
+
+    def test_summary(self):
+        info = self.load_fixture()
+        self.assertEqual(info.summary(), 'This is a test.')
+
+    def test_year(self):
+        info = self.load_fixture()
+        self.assertEqual(info.year(), 2021)
+
+    def test_release_date(self):
+        info = self.load_fixture()
+        self.assertEqual(info.release_date(), date(2021, 5, 4))
+
+    def test_rating(self):
+        info = self.load_fixture()
+        self.assertEqual(info.rating(), 8.2)
+
+    def test_content_rating(self):
+        info = self.load_fixture()
+        self.assertEqual(info.content_rating(), 'PG')
+
+    def test_studio(self):
+        info = self.load_fixture()
+        self.assertEqual(info.studio(), 'Test Studio')
+
+    def test_duration(self):
+        info = self.load_fixture()
+        self.assertEqual(info.duration(), 123)
+
+    def test_directors(self):
+        info = self.load_fixture()
+        self.assertEqual(info.directors(), [
+            {'name': 'Director One'},
+            {'name': 'Director Two'}
+        ])
 
     def test_writers(self):
-        data = {
-            "title": "Test",
-            "year": 2020,
-            "writers": [
-                {"name": "Writer One"},
-                {"name": "Writer Two"}
-            ]
-        }
-        with tempfile.NamedTemporaryFile('w', delete=False) as tmp:
-            tmp.write(json.dumps(data))
-            tmp_path = tmp.name
-        try:
-            info = self.jinf.Jinf.load_file(tmp_path)
-            self.assertEqual(info.writers(), [
-                {"name": "Writer One"},
-                {"name": "Writer Two"}
-            ])
-        finally:
-            os.unlink(tmp_path)
+        info = self.load_fixture()
+        self.assertEqual(info.writers(), [
+            {'name': 'Writer One'}
+        ])
 
     def test_producers(self):
-        data = {
-            "title": "Test",
-            "year": 2020,
-            "producers": [
-                {"name": "Producer One"},
-                {"name": "Producer Two"}
-            ]
-        }
-        with tempfile.NamedTemporaryFile('w', delete=False) as tmp:
-            tmp.write(json.dumps(data))
-            tmp_path = tmp.name
-        try:
-            info = self.jinf.Jinf.load_file(tmp_path)
-            self.assertEqual(info.producers(), [
-                {"name": "Producer One"},
-                {"name": "Producer Two"}
-            ])
-        finally:
-            os.unlink(tmp_path)
-
-    def test_all_fields(self):
-        fixture_path = os.path.join(
-            os.path.dirname(__file__), "fixtures", "all_fields.json"
-        )
-        info = self.jinf.Jinf.load_file(fixture_path)
-        self.assertEqual(info.title(), "Test Movie")
-        self.assertEqual(info.original_title(), "Original Title")
-        self.assertEqual(info.tagline(), "Just a test")
-        self.assertEqual(info.summary(), "This is a test.")
-        self.assertEqual(info.year(), 2021)
-        self.assertEqual(info.release_date(), date(2021, 5, 4))
-        self.assertEqual(info.rating(), 8.2)
-        self.assertEqual(info.content_rating(), "PG")
-        self.assertEqual(info.studio(), "Test Studio")
-        self.assertEqual(info.duration(), 123)
-        self.assertEqual(info.directors(), [
-            {"name": "Director One"},
-            {"name": "Director Two"}
-        ])
-        self.assertEqual(info.writers(), [
-            {"name": "Writer One"}
-        ])
+        info = self.load_fixture()
         self.assertEqual(info.producers(), [
-            {"name": "Producer One"}
+            {'name': 'Producer One'}
         ])
+
+    def test_actors(self):
+        info = self.load_fixture()
         self.assertEqual(info.actors(), [
             {
-                "name": "Actor One",
-                "role": "Hero",
-                "thumb": "http://example.com/one.jpg"
+                'name': 'Actor One',
+                'role': 'Hero',
+                'thumb': 'http://example.com/one.jpg'
             },
-            {"name": "Actor Two"}
+            {'name': 'Actor Two'}
         ])
-        self.assertEqual(list(info.genres()), ["Drama", "Action"])
-        self.assertEqual(list(info.collections()), ["Collection1"])
-        self.assertEqual(list(info.countries()), ["USA", "Japan"])
+
+    def test_genres(self):
+        info = self.load_fixture()
+        self.assertEqual(list(info.genres()), ['Drama', 'Action'])
+
+    def test_collections(self):
+        info = self.load_fixture()
+        self.assertEqual(list(info.collections()), ['Collection1'])
+
+    def test_countries(self):
+        info = self.load_fixture()
+        self.assertEqual(list(info.countries()), ['USA', 'Japan'])
 
     def test_summary_from_description(self):
         data = {
-            "title": "Test",
-            "year": 2020,
-            "description": "Desc"
+            'title': 'Test',
+            'year': 2020,
+            'description': 'Desc'
         }
-        with tempfile.NamedTemporaryFile('w', delete=False) as tmp:
-            tmp.write(json.dumps(data))
-            tmp_path = tmp.name
-        try:
-            info = self.jinf.Jinf.load_file(tmp_path)
-            self.assertEqual(info.summary(), "Desc")
-        finally:
-            os.unlink(tmp_path)
+        info = self.jinf.Jinf(data)
+        self.assertEqual(info.summary(), 'Desc')
 
     def test_year_from_release_date(self):
         data = {
-            "title": "Test",
-            "release_date": "2022-01-02"
+            'title': 'Test',
+            'release_date': '2022-01-02'
         }
-        with tempfile.NamedTemporaryFile('w', delete=False) as tmp:
-            tmp.write(json.dumps(data))
-            tmp_path = tmp.name
-        try:
-            info = self.jinf.Jinf.load_file(tmp_path)
-            self.assertEqual(info.year(), 2022)
-            self.assertEqual(info.release_date(), date(2022, 1, 2))
-        finally:
-            os.unlink(tmp_path)
+        info = self.jinf.Jinf(data)
+        self.assertEqual(info.year(), 2022)
+        self.assertEqual(info.release_date(), date(2022, 1, 2))
+
 
 if __name__ == '__main__':
     unittest.main()
