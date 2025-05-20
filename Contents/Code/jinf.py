@@ -18,8 +18,8 @@ class Jinf:
 
         try:
             data = json.loads(Core.storage.load(path))
-        except json.JSONDecodeError as json_error:
-            raise Exception('Invalid JSON: %s' % json_error)
+        except Exception as e:  # json.JSONDecodeError (Py3) or ValueError (Py2)
+            raise Exception('Invalid JSON: %s' % e)
 
         if not isinstance(data, dict):
             raise Exception('Invalid JSON: must be a dictionary')
