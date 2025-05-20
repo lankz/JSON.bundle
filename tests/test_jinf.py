@@ -68,5 +68,26 @@ class LoadFileTest(unittest.TestCase):
         finally:
             os.unlink(tmp_path)
 
+    def test_producers(self):
+        data = {
+            "title": "Test",
+            "year": 2020,
+            "producers": [
+                {"name": "Producer One"},
+                {"name": "Producer Two"}
+            ]
+        }
+        with tempfile.NamedTemporaryFile('w', delete=False) as tmp:
+            tmp.write(json.dumps(data))
+            tmp_path = tmp.name
+        try:
+            info = self.jinf.Jinf.load_file(tmp_path)
+            self.assertEqual(info.producers(), [
+                {"name": "Producer One"},
+                {"name": "Producer Two"}
+            ])
+        finally:
+            os.unlink(tmp_path)
+
 if __name__ == '__main__':
     unittest.main()

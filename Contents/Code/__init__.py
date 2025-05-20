@@ -106,6 +106,11 @@ class JSONAgent(Agent.Movies):
             writer = metadata.writers.new()
             writer.name = w.get('name')
 
+        metadata.producers.clear()
+        for p in info.producers():
+            producer = metadata.producers.new()
+            producer.name = p.get('name')
+
         metadata.genres.clear()
         for g in info.genres():
             metadata.genres.add(g)
