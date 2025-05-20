@@ -46,6 +46,7 @@ The structure of the `Info.json` file follows as closely as possible that of the
 ```json
 {
     "title": "Akira",
+    "tagline": "Neo-Tokyo is about to explode",
     "summary": "Childhood friends Tetsuo and Kaneda are pulled into the...",
     "year": 1988,
     "rating": 7.7,
