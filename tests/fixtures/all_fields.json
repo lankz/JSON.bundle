@@ -1,0 +1,33 @@
+{
+    "title": "Test Movie",
+    "original_title": "Original Title",
+    "tagline": "Just a test",
+    "summary": "This is a test.",
+    "year": 2021,
+    "release_date": "2021-05-04",
+    "rating": 8.2,
+    "content_rating": "PG",
+    "studio": "Test Studio",
+    "duration": 123,
+    "directors": [
+        {"name": "Director One"},
+        {"name": "Director Two"}
+    ],
+    "writers": [
+        {"name": "Writer One"}
+    ],
+    "producers": [
+        {"name": "Producer One"}
+    ],
+    "actors": [
+        {
+            "name": "Actor One",
+            "role": "Hero",
+            "thumb": "http://example.com/one.jpg"
+        },
+        {"name": "Actor Two"}
+    ],
+    "genres": ["Drama", " Action "],
+    "collections": ["Collection1"],
+    "countries": ["USA", "Japan"]
+}
