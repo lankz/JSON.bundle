@@ -1,47 +1,38 @@
-JSON Metadata Agent for Plex
-============================
+# JSON Metadata Agent for Plex
 
-A metadata agent for Plex that reads from JSON files co-located with your media.
+A small Plex metadata agent that imports information from `Info.json` files stored next to your movies. It is useful when a traditional web scraper cannot easily gather metadata.
 
+## Features
 
-Why?
-----
+- Reads metadata directly from JSON files alongside your movie files
+- Avoids the need for complex or brittle HTML scraping
+- Designed to work with any external tool that generates the JSON
+- Currently supports **movies only**
 
-Not all metadata is easily accessed online via an HTML web page. There are some websites for which it is impossible to write a traditional Plex metadata agent — for example, those that:
+## Installation
 
-* require username and password authentication, possibly even captcha
-* hide information behind javascript
-* detect the automated nature of the metadata agent, throttling or blocking scrapers
-* perform poorly, crash and timeout
-* frequently change their HTML structure
+1. Clone or download this repository.
+2. Copy the `JSON.bundle` directory into your Plex plug-ins folder. On most systems this is located under `Plex Media Server/Plug-ins`.
+3. Restart Plex Media Server.
+4. When creating or editing a movie library choose **JSON Metadata** as the agent.
 
-This agent doesn't collect any metadata itself — it simply loads metadata from JSON files found with your media into Plex.
+## Usage
 
-It's designed to work alongside other tools and methods of collecting metadata, be it a custom scraper (it doesn't even have to be written in Python), browser plugin, command line tool or GUI. You could even edit the files by hand :)
-
-
-Media Preperation
------------------
-
-At the time of writing, JSON metadata is supported *for movies only*.
-
-To define metadata for a movie, a JSON file named exactly `Info.json` must be present in the same directory as your movie file(s). For example:
+Place an `Info.json` file in the same directory as your movie file. A typical layout looks like:
 
 ```
 Movies
-  |- Akira (1988)
-      |- akira.1988.720p.bluray.x264.mp4
-      |- Info.json
-      |- Poster.jpg
+  └─ Akira (1988)
+      ├─ akira.1988.720p.bluray.x264.mp4
+      ├─ Info.json
+      └─ Poster.jpg
 ```
 
-This means you are limited to a single movie and `Info.json` file per directory.
+Only one movie and one `Info.json` file should exist per folder.
 
+### Example `Info.json`
 
-Example JSON
-------------
-
-The structure of the `Info.json` file follows as closely as possible that of the `Movie` model defined by Plex itself (although it's basically undocumented). It should look something like this:
+The structure of the JSON follows Plex's internal movie model. A minimal example is shown below.
 
 ```json
 {
@@ -55,7 +46,7 @@ The structure of the `Info.json` file follows as closely as possible that of the
     "duration": 124,
     "directors": [
         {
-            "name": "Katsuhiro Ōtomo"
+            "name": "Katsuhiro \u014Ctomo"
         }
     ],
     "writers": [
@@ -66,15 +57,29 @@ The structure of the `Info.json` file follows as closely as possible that of the
     "actors": [
         {
             "name": "Mitsuo Iwata",
-            "role": "Shôtarô Kaneda"
-        },
+            "role": "Sh\u00f4tar\u00f4 Kaneda"
+        }
     ],
     "genres": [
-    	"Animation",
+        "Animation",
         "Science Fiction"
     ],
     "collections": [
-    	"Anime"
+        "Anime"
     ]
 }
 ```
+
+See `movie-schema.json` for a full description of the supported fields.
+
+## Development
+
+Run the unit tests with:
+
+```
+python -m unittest tests.test_jinf -v
+```
+
+## License
+
+This project is licensed under the terms found in the [LICENSE](LICENSE) file. "Plex" is a trademark of Plex, Inc. This project is not affiliated with or endorsed by Plex, Inc.
