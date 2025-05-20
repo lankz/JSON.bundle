@@ -58,8 +58,13 @@ The structure of the `Info.json` file follows as closely as possible that of the
             "name": "Katsuhiro Ōtomo"
         }
     ],
+    "writers": [
+        {
+            "name": "Izô Hashimoto"
+        }
+    ],
     "actors": [
-    	{
+        {
             "name": "Mitsuo Iwata",
             "role": "Shôtarô Kaneda"
         },
