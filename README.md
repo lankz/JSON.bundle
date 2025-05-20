@@ -57,8 +57,13 @@ The structure of the `Info.json` file follows as closely as possible that of the
             "name": "Katsuhiro Ōtomo"
         }
     ],
+    "producers": [
+        {
+            "name": "Shigeru Watanabe"
+        }
+    ],
     "actors": [
-    	{
+        {
             "name": "Mitsuo Iwata",
             "role": "Shôtarô Kaneda"
         },

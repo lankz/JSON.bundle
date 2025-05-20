@@ -5,6 +5,7 @@ import tempfile
 import types
 import importlib
 import builtins
+import json
 
 class DummyStorage:
     def load(self, path):
@@ -43,6 +44,27 @@ class LoadFileTest(unittest.TestCase):
             with self.assertRaises(Exception) as ctx:
                 self.jinf.Jinf.load_file(tmp_path)
             self.assertIn('Invalid JSON', str(ctx.exception))
+        finally:
+            os.unlink(tmp_path)
+
+    def test_producers(self):
+        info = {
+            "title": "Test",
+            "year": 2000,
+            "producers": [
+                {"name": "Prod A"},
+                {"name": "Prod B"}
+            ]
+        }
+        with tempfile.NamedTemporaryFile('w', delete=False) as tmp:
+            tmp.write(json.dumps(info))
+            tmp_path = tmp.name
+        try:
+            j = self.jinf.Jinf.load_file(tmp_path)
+            self.assertEqual(j.producers(), [
+                {"name": "Prod A"},
+                {"name": "Prod B"}
+            ])
         finally:
             os.unlink(tmp_path)
 

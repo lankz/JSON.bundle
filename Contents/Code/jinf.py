@@ -81,6 +81,23 @@ class Jinf:
             if is_valid_director(director)
         ]
 
+    def producers(self):
+        def is_valid_producer(producer):
+            return (
+                isinstance(producer, dict) and
+                isinstance(producer.get('name'), (str, unicode)) and
+                str(producer.get('name')).strip()
+            )
+
+        def extract_producer_info(producer):
+            return {'name': str(producer.get('name')).strip()}
+
+        return [
+            extract_producer_info(producer)
+            for producer in self.get_array('producers')
+            if is_valid_producer(producer)
+        ]
+
     def actors(self):
         def is_valid_actor(actor):
             return (

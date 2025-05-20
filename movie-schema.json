@@ -62,6 +62,18 @@
         "required": ["name"]
       }
     },
+    "producers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["name"]
+      }
+    },
     "actors": {
       "type": "array",
       "items": {
