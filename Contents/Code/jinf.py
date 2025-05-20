@@ -53,7 +53,7 @@ class Jinf:
             return self.release_date().year
 
     def rating(self):
-        return self.get_float('rating') or self.get_decimal('rating')
+        return self.get_float('rating')
 
     def content_rating(self):
         return self.get_str('content_rating')
