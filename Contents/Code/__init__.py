@@ -1,4 +1,4 @@
-import os, json
+import os
 
 from jinf import Jinf
 
