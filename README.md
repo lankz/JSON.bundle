@@ -1,6 +1,6 @@
 # JSON Metadata Agent for Plex
 
-A small Plex metadata agent that imports information from `Info.json` files stored next to your movies. It is useful when a traditional web scraper cannot easily gather metadata.
+A small Plex metadata agent that imports information from `Info.json` or `Movie.json` files stored next to your movies. It is useful when a traditional web scraper cannot easily gather metadata.
 
 ## Features
 
@@ -18,7 +18,7 @@ A small Plex metadata agent that imports information from `Info.json` files stor
 
 ## Usage
 
-Place an `Info.json` file in the same directory as your movie file. A typical layout looks like:
+Place an `Info.json` or `Movie.json` file in the same directory as your movie file. The file name is case-insensitive. A typical layout looks like:
 
 ```
 Movies
@@ -28,9 +28,9 @@ Movies
       └─ Poster.jpg
 ```
 
-Only one movie and one `Info.json` file should exist per folder.
+Only one movie and one info file should exist per folder.
 
-### Example `Info.json`
+### Example info JSON
 
 The structure of the JSON follows Plex's internal movie model. A minimal example is shown below.
 

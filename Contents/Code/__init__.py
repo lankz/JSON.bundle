@@ -23,11 +23,22 @@ class JSONAgent(Agent.Movies):
     ]
 
     def load_info(self, media):
-        try: part = media.items[0].parts[0]
-        except: raise Exception('Unable to find media file')
+        try:
+            part = media.items[0].parts[0]
+        except Exception:
+            raise Exception('Unable to find media file')
 
-        return Jinf.load_file(
-           os.path.join(os.path.dirname(part.file), 'Info.json'))
+        movie_dir = os.path.dirname(part.file)
+        try:
+            filenames = os.listdir(movie_dir)
+        except Exception:
+            filenames = []
+
+        for name in filenames:
+            if name.lower() in ('info.json', 'movie.json'):
+                return Jinf.load_file(os.path.join(movie_dir, name))
+
+        raise Exception('No info file found')
 
     def search(self, results, media, lang):
         try: info = self.load_info(media)
