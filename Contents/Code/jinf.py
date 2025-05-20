@@ -81,6 +81,23 @@ class Jinf:
             if is_valid_director(director)
         ]
 
+    def writers(self):
+        def is_valid_writer(writer):
+            return (
+                isinstance(writer, dict) and
+                isinstance(writer.get('name'), (str, unicode)) and
+                str(writer.get('name')).strip()
+            )
+
+        def extract_writer_info(writer):
+            return {'name': str(writer.get('name')).strip()}
+
+        return [
+            extract_writer_info(writer)
+            for writer in self.get_array('writers')
+            if is_valid_writer(writer)
+        ]
+
     def actors(self):
         def is_valid_actor(actor):
             return (
